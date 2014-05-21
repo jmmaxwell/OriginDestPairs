@@ -5,7 +5,7 @@
 ## want to store resulting xlsx.
 
 
-origin.destination.pairs("FarmLocations.csv", "LewistonMcCoy.csv", 100, 200)
+origin.destination.pairs("FarmLocations.csv", "LewistonMcCoy.csv", 301, 350)
 
 
 origin.destination.pairs = function(originCSV, destinationCSV, origin.start, origin.stop){
@@ -20,7 +20,7 @@ origin.destination.pairs = function(originCSV, destinationCSV, origin.start, ori
   origins.data = read.csv(originCSV)
   destinations.data = read.csv(destinationCSV)
   
-  ### this block converst the destinations into API friendly format
+  ### this block converts the destinations into API friendly format
   
   destinations.size = length(destinations.data[,1])
   data.vec = c()
@@ -32,7 +32,7 @@ origin.destination.pairs = function(originCSV, destinationCSV, origin.start, ori
   ### this block breaks it up into chunks that the API can handle, cutting it off at the limit
   
   chunk.size = 100%/%destinations.size
-  sample.size = origin.stop-origin.start
+  sample.size = (origin.stop+1)-origin.start
   n.chunk = sample.size%/%chunk.size
   chunks = list()
   for (i in 1:n.chunk){
@@ -43,8 +43,6 @@ origin.destination.pairs = function(originCSV, destinationCSV, origin.start, ori
   m.list = list()
   
   for (c in 1:n.chunk){
-    Sys.sleep(10.1)
-    
     
     ### this block puts it into the format the API needs
     
@@ -74,6 +72,8 @@ origin.destination.pairs = function(originCSV, destinationCSV, origin.start, ori
       final.dest.dur[l] = which(dur.matrix[l,]==min(dur.matrix[l,]))
     }
     m.list[[c]] = data.table(dist.matrix, final.dest.dist, dur.matrix, final.dest.dur)
+    
+    Sys.sleep(10.1)
     
   }
   
